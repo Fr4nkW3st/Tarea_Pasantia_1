@@ -18,17 +18,17 @@ export class TareasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.tareasService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTareaDto: UpdateTareaDto) {
+  update(@Param('id') id: number, @Body() updateTareaDto: UpdateTareaDto) {
     return this.tareasService.update(+id, updateTareaDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.tareasService.remove(+id);
   }
 }
