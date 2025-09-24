@@ -6,6 +6,9 @@ export class Estudiante {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({ unique: true })
+    rut: string
+
     @Column()
     nombre: string
 

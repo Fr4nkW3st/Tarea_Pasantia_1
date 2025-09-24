@@ -5,15 +5,30 @@ import { NotFoundException } from '@nestjs/common';
 import { CreateTareaDto } from './dto/create-tarea.dto';
 import { UpdateTareaDto } from './dto/update-tarea.dto';
 import { Tarea } from './entities/tarea.entity';
+import { Estudiante } from 'src/estudiantes/entities/estudiante.entity';
 
 @Injectable()
 export class TareasService {
   constructor(
-      @InjectRepository(Tarea)
-      private tareasRepository: Repository<Tarea>,
-    ) {}
+    @InjectRepository(Tarea)
+    private readonly tareasRepository: Repository<Tarea>,
 
-    async create(createTareaDto: CreateTareaDto): Promise<{ message: string, tarea: Tarea }> {
+    @InjectRepository(Estudiante)
+    private readonly estudiantesRepository: Repository<Estudiante>,
+  ) {}
+
+    async create(createTareaDto: CreateTareaDto, ): Promise<{ message: string, tarea: Tarea }> {
+
+    const { estudianteId, ...datosTarea } = createTareaDto;
+
+    const estudiante = await this.estudiantesRepository.findOne({
+      where: { id: estudianteId },
+    });
+
+    if (!estudiante) {
+      throw new NotFoundException(`No se encontró un estudiante con ID ${estudianteId}`);
+    }
+
     const nuevaTarea = this.tareasRepository.create(createTareaDto);
     const tarea = await this.tareasRepository.save(nuevaTarea);
     return {

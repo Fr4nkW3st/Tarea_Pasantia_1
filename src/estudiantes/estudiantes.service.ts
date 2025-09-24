@@ -14,6 +14,16 @@ export class EstudiantesService {
   ) {}
 
   async create(createEstudianteDto: CreateEstudianteDto): Promise<{ message: string, estudiante: Estudiante }> {
+     const estudianteRut = await this.estudiantesRepository.findOneBy({ rut: createEstudianteDto.rut })
+     if (estudianteRut) {
+      throw new NotFoundException(`El Rut Ya Se Encuentra Registrado`);
+    }
+
+     const estudianteEmail = await this.estudiantesRepository.findOneBy({ correo: createEstudianteDto.correo })
+     if (estudianteEmail) {
+      throw new NotFoundException(`El Email Ya Esta Asociado A Un Estudiante`);
+    }
+    
     const nuevoEstudiante = this.estudiantesRepository.create(createEstudianteDto);
     const estudiante = await this.estudiantesRepository.save(nuevoEstudiante);
     return {
@@ -21,12 +31,13 @@ export class EstudiantesService {
       estudiante,
     };
 }
-
+  
   async findAll(): Promise<Estudiante[]> {
   return this.estudiantesRepository.find();
 }
 
   async findOne(id: number): Promise<{ message: string, estudiante: Estudiante }> {
+   
     const estudiante = await this.estudiantesRepository.findOneBy({ id });
     if (!estudiante) {
       throw new NotFoundException(`Estudiante con ID ${id} no encontrado`);
@@ -43,7 +54,7 @@ export class EstudiantesService {
       throw new NotFoundException(`Estudiante con ID ${id} no encontrado`);
     }
 
-    await this.estudiantesRepository.update(id, updateEstudianteDto);
+    await this.estudiantesRepository.update({ id }, updateEstudianteDto);
     const estudianteActualizado = await this.estudiantesRepository.findOneBy({ id });
 
     return {

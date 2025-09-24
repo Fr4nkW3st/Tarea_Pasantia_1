@@ -13,7 +13,7 @@ import { TareasModule } from './tareas/tareas.module';
       port: 5432,
       username: 'postgres',
       password: 'admin',
-      database: 'Tareas',
+      database: 'Practica',
       entities: [ Estudiante, Tarea ],
       synchronize: true,
     }),

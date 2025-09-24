@@ -1,20 +1,25 @@
 import { Estudiante } from "src/estudiantes/entities/estudiante.entity"
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
 
 @Entity()
 export class Tarea {
-    @PrimaryGeneratedColumn()
-    id: number
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    titulo: string
+  @Column()
+  titulo: string;
 
-    @Column()
-    descripcion: string
+  @Column()
+  descripcion: string;
 
-    @Column()
-    fecha_entrega: Date
+  @Column()
+  fecha_entrega: Date;
 
-    @ManyToOne(() => Estudiante, (estudiante) => estudiante.tareas)
-    estudiante: Estudiante
+  @ManyToOne(() => Estudiante, estudiante => estudiante.tareas)
+  @JoinColumn({ name: 'estudianteId', referencedColumnName: 'id' })
+  estudiante: Estudiante;
+
+  @Column()
+  estudianteId: number;  
 }
+
